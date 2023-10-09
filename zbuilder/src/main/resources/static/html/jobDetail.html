@@ -34,8 +34,8 @@
 				alert("操作出错:" + result.message);
 	       	 }
 	        },
-	        error: function(result){
-				alert("操作出错:" + result.message);
+	        error: function(xhr, status, error) {
+	            alert("error：" + error + '\n' + xhr.responseText); 
 	        }
 	    });
 	}
@@ -65,8 +65,8 @@
 				alert("操作出错:" + result.message);
 	       	 }
 	        },
-	        error: function(result){
-				alert("操作出错:" + result.message);
+	        error: function(xhr, status, error) {
+	            alert("error：" + error + '\n' + xhr.responseText); 
 	        }
 	    });
 	}
@@ -93,12 +93,13 @@
 	       		 alert("start-成功");
 	       		location.reload();
 	       	 } else {
-				alert("操作出错:" + result.message);
+				alert("操作出错:" + result.code);
 	       	 }
 	        },
-	        error: function(result){
-				alert("操作出错:" + result.message);
+	        error: function(xhr, status, error) {
+	            alert("error：" + error + '\n' + xhr.responseText); 
 	        }
+	      
 	    });
 	}
 	
@@ -131,8 +132,8 @@
 				alert("操作出错:" + result.message);
 	       	 }
 	        },
-	        error: function(result){
-				alert("操作出错:" + result.message);
+	        error: function(xhr, status, error) {
+	            alert("error：" + error + '\n' + xhr.responseText); 
 	        }
 	    });
 	}

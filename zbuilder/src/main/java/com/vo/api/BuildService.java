@@ -243,7 +243,9 @@ public class BuildService {
 //		final String input = "sb_jenkins_test_20230923_example.jar";
 //		final boolean isMatch = input.matches("^sb_jenkins_test_20230923.*\\.jar$");
 //		System.out.println(isMatch); // 输出: true
-		return null;
+
+//		return null;
+		throw new IllegalArgumentException("工作区下未找到文件");
 	}
 
 	private static File checkDir(final String dir) {
