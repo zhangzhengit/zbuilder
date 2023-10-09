@@ -1,0 +1,21 @@
+@charset "UTF-8";
+
+body {
+	background-color: pink;
+}
+
+
+.table-container {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  table {
+    width: auto;
+    table-layout: fixed;
+  }
+  td {
+    word-break: break-word;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }

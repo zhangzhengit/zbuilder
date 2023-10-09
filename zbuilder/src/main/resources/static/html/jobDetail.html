@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript">
+
+	function build(jobId){
+		 
+		if (!confirm("确定立即构建？")) {
+			return;
+		}
+		
+		var remark = prompt("请输入构建备注信息：");
+		
+		var name = $("#name").val();
+		var password = $("#password").val();
+		var urlData={
+			 "remark":remark,
+			 "jobId":jobId
+		};
+		
+	
+		 $.ajax({
+	        type:"POST",
+	        url: "/buildstart",
+	        data: JSON.stringify(urlData), 
+	        contentType : "application/json;charset=UTF-8",
+	        dataType: "json",
+	        success: function(result){
+	       	 if(result.code == 0){
+// 	       		 window.location.href="/tobuildResult?uuid=" + result.data;
+	       		window.open("/tobuildResult?uuid=" + result.data, "_blank");
+	       	 } else {
+				alert("操作出错:" + result.message);
+	       	 }
+	        },
+	        error: function(result){
+				alert("操作出错:" + result.message);
+	        }
+	    });
+	}
+	
+	function kill(jobId,jobName,nodeId,nodeName){
+		 
+		if (!confirm("确定停止["+ nodeName + "]上的应用["+jobName+"]？")) {
+			return;
+		}
+		
+		var urlData={
+			 "jobId":jobId,
+			 "nodeId":nodeId
+		};
+	
+		 $.ajax({
+	        type:"POST",
+	        url: "/killJob",
+	        data: JSON.stringify(urlData), 
+	        contentType : "application/json;charset=UTF-8",
+	        dataType: "json",
+	        success: function(result){
+	       	 if(result.code == 0){
+	       		 alert("kill-成功");
+	       		 location.reload();
+	       	 } else {
+				alert("操作出错:" + result.message);
+	       	 }
+	        },
+	        error: function(result){
+				alert("操作出错:" + result.message);
+	        }
+	    });
+	}
+	
+	function start(jobId,jobName,nodeId,nodeName){
+		 
+		if (!confirm("确定启动["+ nodeName + "]上的应用["+jobName+"]？")) {
+			return;
+		}
+		
+		var urlData={
+			 "jobId":jobId,
+			 "nodeId":nodeId
+		};
+	
+		 $.ajax({
+	        type:"POST",
+	        url: "/startJob",
+	        data: JSON.stringify(urlData), 
+	        contentType : "application/json;charset=UTF-8",
+	        dataType: "json",
+	        success: function(result){
+	       	 if(result.code == 0){
+	       		 alert("start-成功");
+	       		location.reload();
+	       	 } else {
+				alert("操作出错:" + result.message);
+	       	 }
+	        },
+	        error: function(result){
+				alert("操作出错:" + result.message);
+	        }
+	    });
+	}
+	
+	//部署指定的版本
+	function startVersion(jobId,jobName,nodeId,nodeName){
+		
+		var selectedValue = $('#history  option:selected').val();
+		var selectedText = $('#history  option:selected').text();
+		 
+		if (!confirm("确定部署版本："+ selectedText.trim() + " ？")) {
+			return;
+		}
+		// FIXME 写这里
+		var urlData={
+			 "hId":selectedValue,
+			 "nodeId":nodeId
+		};
+	
+		 $.ajax({
+	        type:"POST",
+	        url: "/startJob",
+	        data: JSON.stringify(urlData), 
+	        contentType : "application/json;charset=UTF-8",
+	        dataType: "json",
+	        success: function(result){
+	       	 if(result.code == 0){
+	       		 alert("start-成功");
+	       		location.reload();
+	       	 } else {
+				alert("操作出错:" + result.message);
+	       	 }
+	        },
+	        error: function(result){
+				alert("操作出错:" + result.message);
+	        }
+	    });
+	}
+	
+
+	function startAllNode(jobId,jobName){
+		 
+		if (!confirm("确定启动全部节点上的应用["+jobName+"]？")) {
+			return;
+		}
+		
+		var urlData={
+			 "jobId":jobId
+		};
+	
+		 $.ajax({
+	        type:"POST",
+	        url: "/startJobAllNode",
+	        data: JSON.stringify(urlData), 
+	        contentType : "application/json;charset=UTF-8",
+	        dataType: "json",
+	        success: function(result){
+	       	 if(result.code == 0){
+	       		 alert("startAllNode-成功");
+	       		location.reload();
+	       	 } else {
+				alert("操作出错:" + result.message);
+	       	 }
+	        },
+	        error: function(result){
+				alert("操作出错:" + result.message);
+	        }
+	    });
+	}
+	
+	function killAllNode(jobId,jobName){
+		 
+		if (!confirm("确定停止全部节点上的应用["+jobName+"]？")) {
+			return;
+		}
+		
+		var urlData={
+			 "jobId":jobId
+		};
+	
+		 $.ajax({
+	        type:"POST",
+	        url: "/killJobAllNode",
+	        data: JSON.stringify(urlData), 
+	        contentType : "application/json;charset=UTF-8",
+	        dataType: "json",
+	        success: function(result){
+	       	 if(result.code == 0){
+	       		 alert("killJobAllNode-成功");
+	       		location.reload();
+	       	 } else {
+				alert("操作出错:" + result.message);
+	       	 }
+	        },
+	        error: function(result){
+				alert("操作出错:" + result.message);
+	        }
+	    });
+	}
+	
+	
+	function console1(hId){
+		window.open("/showConsole?bhId=" + hId, "_blank");
+	}
+
+</script> 
+	
+<link rel="stylesheet" type="text/css" href="/css/index.css">
+<meta charset="UTF-8">
+<title>钢蛋自动化部署工具-job详情</title>
+</head>
+
+
+<body>
+
+	<hr/>
+	<h2>job详情</h2>
+		<h4>工程名称：${jobEntity.projectName}</h4>
+		<h4>端口号：${jobEntity.appPort?c}</h4>
+		<h4>仓库URL：${jobEntity.repositoryUrl}</h4>
+		<h4>仓库用户名：${jobEntity.userName}</h4>
+		<h4>构建命令：${jobEntity.buildCommand}</h4>
+		<h4>运行目录：${jobEntity.targetDirectory}</h4>
+		<h4>目标节点ID：${jobEntity.targetNodeId}</h4>
+	<hr/>
+		
+	<h2>节点运行状态</h2>
+	
+		<h4>${nodeStatus}</h4>
+		<hr/>
+		<h4>
+			<input id="killAllNode" type="button"  onclick="killAllNode(${jobEntity.id},'${jobEntity.projectName}')"  value="停止所有节点"/>
+			<input id="statAllNode" type="button"  onclick="startAllNode(${jobEntity.id},'${jobEntity.projectName}')"  value="启动所有节点"/>
+		</h4>
+		<hr/>
+		<table border="2">
+			<tr>
+				<td>节点Id</td>
+				<td>IP</td>
+				<td>节点名称</td>
+				<td>节点运行状态</td>
+				<td>部署指定的版本</td>
+				<td>操作</td>
+			</tr>
+			
+			<#list nodeStatusList as n>
+				<tr>
+					<td>${n.nodeId}</td>
+					<td>${n.nodeIp}</td>
+					<td>${n.nodeName}</td>
+					<td>${n.nodeStatusString}</td>
+					<td>
+						<select id="history">
+							<#list historyList as h>
+							  <option value="${h.id}">
+							  ${h.version} - [${h.createTime?string("yyyy-MM-dd HH:mm:ss")}]
+							  	<#if h.remark?has_content>
+							  		-
+								  ${h.remark}
+							  	<#else>
+								  ${h.remark}
+							  	</#if>
+							  
+							  </option>
+							</#list>
+						</select>
+					   	<input id="start" type="button" onclick="startVersion(${n.jobId},'${n.jobName}',${n.nodeId},'${n.nodeName}')" value="部署此版本"/>
+					</td>
+					<td>
+						<#if n.nodeStatus == 1>
+						   	<input id="kill" type="button" onclick="kill(${n.jobId},'${n.jobName}',${n.nodeId},'${n.nodeName}')" value="停止"/>
+						</#if>
+<!-- 						<#if n.nodeStatus == 2> -->
+						   	<input id="start" type="button" onclick="start(${n.jobId},'${n.jobName}',${n.nodeId},'${n.nodeName}')" value="部署最新版本"/>
+<!-- 						</#if> -->
+					</td>
+				</tr>
+			</#list>
+		</table>
+	<hr/>
+	
+</body>
+
+</html>

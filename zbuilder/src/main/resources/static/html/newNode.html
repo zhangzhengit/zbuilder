@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript">
+
+	function create(){
+		 
+		
+		var name = $("#name").val();
+		var ip = $("#ip").val();
+		var urlData={
+			 "name":name,
+			 "ip":ip
+		};
+		
+	
+		 $.ajax({
+	        type:"POST",
+	        url: "/newNode",
+	        data: JSON.stringify(urlData), 
+	        contentType : "application/json;charset=UTF-8",
+	        dataType: "json",
+	        success: function(result){
+	       	 if(result.code == 0){
+	       		 	alert('OK');
+// 	       		 window.location.href="/tobuildResult?uuid=" + result.data;
+// 	       		window.open("/tobuildResult?uuid=" + result.data, "_blank");
+	       	 } else {
+				alert("操作出错:" + result.message);
+	       	 }
+	        },
+	        error: function(result){
+				alert("操作出错:" + result.message);
+	        }
+	    });
+	}
+	
+</script> 
+	
+<link rel="stylesheet" type="text/css" href="/css/index.css">
+<meta charset="UTF-8">
+<title>钢蛋自动化部署工具-新增节点</title>
+</head>
+
+
+<body>
+
+	<hr/>
+	<h1>新增节点</h1>
+	<table border="1">
+		<tr>
+			<td>名称</td>
+			<td><input type="text" id="name" placeholder="输入节点名称" /></td>
+		</tr>
+		<tr>
+			<td>IP</td>
+			<td><input type="text" id="ip" placeholder="输入节点IP" /></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><input type="button" onclick="create()" value="确认新增节点"/></td>
+		</tr>
+		</tr>
+	</table>
+	<hr/>
+		注意：
+		<br/>
+		1 新增的节点默认为启用状态
+		<br/>
+		2 请在本应用执行的机器上执行命令： ssh-copy-id root@新增节点IP
+	<hr/>
+	
+</body>
+
+</html>

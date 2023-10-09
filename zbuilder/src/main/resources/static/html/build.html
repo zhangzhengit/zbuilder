@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript">
+
+	function build(jobId){
+		 
+		if (!confirm("确定立即构建？")) {
+			return;
+		}
+		
+		var remark = prompt("请输入构建备注信息：");
+		
+		var name = $("#name").val();
+		var password = $("#password").val();
+		var urlData={
+			 "remark":remark,
+			 "jobId":jobId
+		};
+		
+	
+		 $.ajax({
+	        type:"POST",
+	        url: "/buildstart",
+	        data: JSON.stringify(urlData), 
+	        contentType : "application/json;charset=UTF-8",
+	        dataType: "json",
+	        success: function(result){
+	       	 if(result.code == 0){
+// 	       		 window.location.href="/tobuildResult?uuid=" + result.data;
+	       		window.open("/tobuildResult?uuid=" + result.data, "_blank");
+	       	 } else {
+				alert("操作出错:" + result.message);
+	       	 }
+	        },
+	        error: function(result){
+				alert("操作出错:" + result.message);
+	        }
+	    });
+	}
+	
+	function deploy(version,hId){
+		 
+		if (!confirm("确定立即部署版本["+version+"}？")) {
+			return;
+		}
+		
+		var remark = prompt("请输入部署备注信息：");
+		
+		var urlData={
+			 "version":version,
+			 "hId":hId
+		};
+	
+		 $.ajax({
+	        type:"POST",
+	        url: "/deploy",
+	        data: JSON.stringify(urlData), 
+	        contentType : "application/json;charset=UTF-8",
+	        dataType: "json",
+	        success: function(result){
+	       	 if(result.code == 0){
+	       		 alert("deploy-OK");
+// 	       		 window.location.href="/tobuildResult?uuid=" + result.data;
+// 	       		window.open("/tobuildResult?uuid=" + result.data, "_blank");
+	       	 } else {
+				alert("操作出错:" + result.message);
+	       	 }
+	        },
+	        error: function(result){
+				alert("操作出错:" + result.message);
+	        }
+	    });
+	}
+	
+	function console1(hId){
+		window.open("/showConsole?bhId=" + hId, "_blank");
+	}
+
+</script> 
+	
+<link rel="stylesheet" type="text/css" href="/css/index.css">
+<meta charset="UTF-8">
+<title>钢蛋自动化部署工具-构建</title>
+</head>
+
+
+<body>
+
+	<hr/>
+	<h1>job详情</h1>
+		<h3>工程名称：${jobEntity.projectName}</h3>
+		<h3>仓库URL：${jobEntity.repositoryUrl}</h3>
+		<h3>仓库用户名：${jobEntity.userName}</h3>
+		<h3>构建命令：${jobEntity.buildCommand}</h3>
+		<h3>运行目录：${jobEntity.targetDirectory}</h3>
+		<h3>目标节点ID：${jobEntity.targetNodeId}</h3>
+	
+		<h3>
+			<input type="button" onclick="build(${jobEntity.id})" value="立即构建"/>
+		</h3>
+	<hr/>
+		构建历史记录
+	<table border = "1" title="构建历史记录">
+			<tr>
+				<td>ID</td>
+				<td>版本号</td>
+				<td>构建时间</td>
+				<td>UUID</td>
+				<td>备注信息</td>
+				<td>操作</td>
+			</tr>
+			<#list historyList as n>
+			<tr>
+				<tr>
+					<td>${n.id}</td>
+					<td>${n.version}(${n.result})</td>
+					<td>${n.createTime?string("yyyy-MM-dd HH:mm:ss")}</td>
+					<td>${n.uuid}</td>
+					<td>${n.remark}</td>
+					<td>
+						<input type="button" onclick="console1(${n.id})" value="查看控制台输出"/>
+<!-- 						<input type="button" onclick="deploy(${n.version},${n.id})" value="部署此版本(${n.version})"/> -->
+
+						<a href = "/toJobDetail?jobId=${n.jobId}" target="_blank">部署</a>
+						
+					</td>
+				</tr>
+			</#list>
+	</table>
+	<hr/>
+	
+</body>
+
+</html>

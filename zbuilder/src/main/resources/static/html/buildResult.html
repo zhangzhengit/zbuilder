@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript">
+
+	$(document).ready(function() {
+	  var intervalId;
+	  var textArea = $('#result');
+	  var uuid = $('#uuid').text();
+		
+// 	  alert("uuid " + uuid);
+	
+	  function pollData() {
+	    $.get('/getBuildInfo?uuid=' + uuid, function(cr) {
+    	 if (cr.code === 0) {
+    		 if(cr.data){
+		   	 	 textArea.append(cr.data + '\n');
+		   	  
+			   	 var scrollHeight = textArea[0].scrollHeight;
+			     var clientHeight = textArea.innerHeight();
+			     if (scrollHeight > clientHeight) {
+			    	 textArea.scrollTop(scrollHeight - clientHeight);
+			     }
+    		 }
+//     		 deploy.prop("disabled", false);
+	    	 return;
+	      }
+	       clearInterval(intervalId);
+	    });
+	  }
+
+	  // 页面加载完成后，立即开始轮询
+	  intervalId = setInterval(pollData, 85);
+
+	  $('#stop').click(function() {
+	    clearInterval(intervalId);
+	  });
+	});
+
+	function deploy() {
+		var uuid = $('#uuid').text();
+		alert("部署:" + uuid);
+		
+	}
+		
+</script> 
+	
+<link rel="stylesheet" type="text/css" href="/css/index.css">
+<meta charset="UTF-8">
+<title>钢蛋自动化部署工具-构建结果输出</title>
+</head>
+
+
+<body>
+
+	<hr/>
+	<h1>构建结果输出 <label id="uuid">${uuid}</label></h1>
+	<hr/>
+	<textarea id="result" rows="30" cols="160"></textarea>
+	<hr/>
+	<input id="deploy" type="button" onclick="deploy()" value="立即部署"/>
+	<hr/>
+	
+</body>
+
+</html>

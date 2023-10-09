@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript">
+
+	function create(){
+		 
+		
+		var name = $("#name").val();
+		var ip = $("#ip").val();
+		var urlData={
+			 "name":name,
+			 "ip":ip
+		};
+		
+	
+		 $.ajax({
+	        type:"POST",
+	        url: "/newNode",
+	        data: JSON.stringify(urlData), 
+	        contentType : "application/json;charset=UTF-8",
+	        dataType: "json",
+	        success: function(result){
+	       	 if(result.code == 0){
+	       		 	alert('OK');
+// 	       		 window.location.href="/tobuildResult?uuid=" + result.data;
+// 	       		window.open("/tobuildResult?uuid=" + result.data, "_blank");
+	       	 } else {
+				alert("操作出错:" + result.message);
+	       	 }
+	        },
+	        error: function(result){
+				alert("操作出错:" + result.message);
+	        }
+	    });
+	}
+	
+</script> 
+	
+<link rel="stylesheet" type="text/css" href="/css/index.css">
+<meta charset="UTF-8">
+<title>钢蛋自动化部署工具-新增job</title>
+</head>
+
+<body>
+
+	<hr/>
+	<h1>新增job</h1>
+	<div class="table-container">
+	
+		<table border="1" >
+			<tr>
+				<td>工程名称</td>
+				<td><input type="text" id="name" placeholder="输入工程名称" /></td>
+			</tr>
+			<tr >
+				<td>运行的端口号</td>
+				<td><input type="text" id="ip" placeholder="输入工程运行的端口号"/></td>
+			</tr>
+			<tr>
+				<td>代码仓库地址</td>
+				<td><input type="text" id="ip" placeholder="输入代码仓库地址" /></td>
+			</tr>
+			<tr>
+				<td>代码仓库用户名</td>
+				<td><input type="text" id="ip" placeholder="输入代码仓库用户名" /></td>
+			</tr>
+			<tr>
+				<td>代码仓库密码</td>
+				<td><input type="text" id="ip" placeholder="输入代码仓库密码" /></td>
+			</tr>
+			<tr>
+				<td>构建命令</td>
+				<td><input type="text" id="ip" placeholder="输入构建目录，如：clean install" /></td>
+			</tr>
+			<tr>
+				<td>运行目录</td>
+				<td><input type="text" id="ip" placeholder="输入构建出的程序运行的目录" /></td>
+			</tr>
+			<tr>
+				<td>选择节点</td>
+				<td><input type="text" id="ip" placeholder="勾选程序运行的节点" /></td>
+			</tr>
+			<tr>
+				<td>日志文件目录</td>
+				<td><input type="text" id="ip" placeholder="输入日志文件目录，如：/root/jar/app.log" /></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><input type="button" onclick="create()" value="确认新增job"/></td>
+			</tr>
+			</tr>
+		</table>
+	
+	</div>
+	
+<!-- 	<hr/> -->
+<!-- 		注意： -->
+<!-- 		<br/> -->
+<!-- 		1 新增的节点默认为启用状态 -->
+<!-- 		<br/> -->
+<!-- 		2 请在本应用执行的机器上执行命令： ssh-copy-id root@新增节点IP -->
+<!-- 	<hr/> -->
+	
+</body>
+
+</html>

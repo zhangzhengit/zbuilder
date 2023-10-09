@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript">
+
+	function checkNodePort(jobId){
+		var urlData={
+			 "jobId":jobId
+		};
+	
+		 $.ajax({
+	        type:"POST",
+	        url: "/checkNodePort",
+	        data: JSON.stringify(urlData), 
+	        contentType : "application/json;charset=UTF-8",
+	        dataType: "json",
+	        success: function(result){
+	       	 if(result.code == 0){
+	       		 alert(result.data);
+// 	       		 window.location.href="/tobuildResult?uuid=" + result.data;
+// 	       		window.open("/tobuildResult?uuid=" + result.data, "_blank");
+	       	 } else {
+				alert("操作出错:" + result.message);
+	       	 }
+	        },
+	        error: function(result){
+				alert("操作出错:" + result.message);
+	        }
+	    });
+		 
+	}
+	
+	function stopNode(nodeId,nodeName){
+		if (!confirm("确定停用节点 " + nodeName +" ？")) {
+			return;
+		}
+		
+		var urlData={
+			 "nodeId":nodeId
+		};
+	
+		 $.ajax({
+	        type:"POST",
+	        url: "/stopNode",
+	        data: JSON.stringify(urlData), 
+	        contentType : "application/json;charset=UTF-8",
+	        dataType: "json",
+	        success: function(result){
+	       	 if(result.code == 0){
+	       		 alert('操作成功');
+	       		location.reload();
+	       	 } else {
+				alert("操作出错:" + result.message);
+	       	 }
+	        },
+	        error: function(result){
+				alert("操作出错:" + result.message);
+	        }
+	    });
+		 
+	}
+	
+	function startNode(nodeId,nodeName){
+		if (!confirm("确定启用节点 " + nodeName +" ？")) {
+			return;
+		}
+		
+		var urlData={
+			 "nodeId":nodeId
+		};
+	
+		 $.ajax({
+	        type:"POST",
+	        url: "/startNode",
+	        data: JSON.stringify(urlData), 
+	        contentType : "application/json;charset=UTF-8",
+	        dataType: "json",
+	        success: function(result){
+	       	 if(result.code == 0){
+	       		 alert('操作成功');
+	       		location.reload();
+	       	 } else {
+				alert("操作出错:" + result.message);
+	       	 }
+	        },
+	        error: function(result){
+				alert("操作出错:" + result.message);
+	        }
+	    });
+		 
+	}
+
+	function newNode(){
+		
+		window.open("/toNewNode", "_blank");
+		 
+	}
+</script> 
+	
+
+<link rel="stylesheet" type="text/css" href="/css/index.css">
+<meta charset="UTF-8">
+<title>钢蛋自动化部署工具</title>
+</head>
+
+
+<body>
+
+	<hr />
+	<h1>
+		job列表 | <a href="/toNewJob" target="_blank">新增job</a>
+	</h1>
+	<hr />
+	<h2>刷新时间：${refreshTime?string("yyyy-MM-dd HH:mm:ss")}</h2>
+	<table border = "1">
+		<tr>
+			<td>ID</td><td>工程名称</td>
+			<td>程序执行端口</td>
+			<td>状态</td>
+<!-- 			<td>仓库URL</td> -->
+<!-- 			<td>仓库用户名</td> -->
+<!-- 			<td>构建命令</td> -->
+			<td>目标节点</td>
+			<td>目标节点程序运行目录</td><td>Job创建时间</td>
+			<td>操作</td>
+		</tr>
+		
+		<#list jobList as n>
+			<tr>
+				<td>${n.id}</td>
+				<td>
+					<a href = "/toJobDetail?jobId=${n.id}" target="_blank">${n.projectName}</a>
+				</td>
+				<td>${n.appPort?c}</td>
+				<td>${n.statusString}</td>
+				<td>${n.nodeNickName}</td>
+				<td>${n.targetDirectory}</td>
+				<td>${n.createTime?string("yyyy-MM-dd HH:mm:ss")}</td>
+				
+				<td>
+					<a href = "/build?id=${n.id}" target="_blank">构建</a>
+					<a href = "">构建并部署</a>
+				</td>
+			</tr>
+		</#list>
+		
+	</table>
+	
+	<hr/>
+	
+	<h1>节点列表</h1>
+	<table border = "1">
+		<tr>
+			<td>节点ID</td>
+			<td>节点名称</td><td>IP</td><td>状态</td>
+			<td>操作</td>
+		</tr>
+		
+		<#list nodeList as n>
+	   		 <tr>
+				<td>${n.id}</td>
+				<td>${n.nickName}</td>
+				<td>${n.ip}</td>
+				<td>${n.statusString}</td>
+				<td>
+					<#if n.status == 1>
+						<input type="button" onclick="startNode(${n.id},'${n.nickName}')" value="启用节点"/>
+					</#if>
+					<#if n.status == 2>
+						<input type="button" onclick="stopNode(${n.id},'${n.nickName}')" value="停用节点"/>
+					</#if>
+					<input type="button" onclick="build(${n.id})" value="停止全部应用"/>
+					<input type="button" onclick="build(${n.id})" value="重启全部应用"/>
+				</td>
+			</tr>
+		</#list>
+
+		
+	</table>
+	
+	<hr/>
+		<input type="button" onclick="newNode()" value="新增节点"/>
+	<hr/>
+	
+	
+</body>
+
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="/css/index.css">
+<meta charset="UTF-8">
+
+<title>钢蛋自动化部署工具</title>
+
+</head>
+
+
+<body>
+
+	<h1>钢蛋自动化部署工具</h1>
+	<h5>目前仅支持ubuntu上通过svn部署java程序</h5>
+	
+	
+	<table>
+		<form action="/user/login">
+			<table>
+					 SVN地址：
+					 <input type="text" id="name"
+					 placeholder="如：svn://192.168.1.1:3690/springboot_demo1"
+					 style="width: 50%;"
+					 />
+					 <br/>
+					 
+					 SVN用户名：
+					 <input type="text" id="name"
+					 placeholder="填写svn服务器的用户名"
+					 style="width: 50%;"
+					 />
+					 <br/>
+					 
+					 SVN密码：
+					 <input type="text" id="name"
+					 placeholder="填写svn服务器的密码"
+					 style="width: 50%;"
+					 />
+					 <br/>
+					 <hr/>
+					 
+					 MVN命令：
+					<input type="password" id="password" placeholder="如：clean install -Dmaven.test.skip=true"
+					style="width: 50%;"
+					/>
+						
+				<tr>
+					<td></td><td><input type="button" id="submit" onclick="login()" value="登录"/></td>
+				</tr>
+				<tr>
+					<td></td><td><label id="message"></label></td>
+				</tr>
+			</table>
+		</form>
+	</table>
+
+	
+</body>
+
+<script type="text/javascript">
+	
+	function changeColor(){
+		document.getElementById('id1').style.color='blue';
+	}
+
+</script>
+
+</html>
