@@ -32,4 +32,10 @@ public class Conf {
 	@ZNotNull
 	private String backups;
 
+	/**
+	 * 	启动时自动安装程序的目录，如：apt install maven
+	 */
+	@ZNotNull
+	private String install;
+
 }

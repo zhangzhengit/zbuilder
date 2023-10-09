@@ -4,10 +4,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.vo.core.OS;
+import com.vo.conf.Conf;
 import com.vo.core.ZClass;
 import com.vo.core.ZContext;
 import com.vo.core.ZLog2;
+import com.vo.service.ExecuteResult;
+import com.vo.service.SVNService;
 import com.vo.starter.ZRepositoryStarter;
 
 /**
@@ -48,6 +50,19 @@ public class SbGangdanApplication {
 		final String scanPackageName = "com.vo";
 		startZRepository(scanPackageName);
 		ZApplication.run(scanPackageName, true, args);
+
+		final Conf conf = ZContext.getBean(Conf.class);
+		final String command = conf.getInstall();
+
+		LOG.info("开始自动安装软件,command={}", command);
+		final ExecuteResult commandResult = SVNService.executeLinux("install", command);
+
+		if (!commandResult.succeeded()) {
+			LOG.info("安装软件失败，本应用自动关闭。自动安装软件输出={}", commandResult.getOutput());
+			System.exit(0);
+		}
+
+		LOG.info("自动安装软件输出={}", commandResult.getOutput());
 
 	}
 

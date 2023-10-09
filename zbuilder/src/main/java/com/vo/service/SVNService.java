@@ -34,7 +34,8 @@ public class SVNService {
 		final String command = commandEnum.getCommand() + " " + url + " --username " + userName + " --password "
 				+ password;
 
-		return executeLinux(uuid, command);
+		final ExecuteResult result = executeLinux(uuid, command);
+		return result.getOutput();
 	}
 
 	public static String executeWindows(final String uuid, final String command) {
@@ -64,7 +65,7 @@ public class SVNService {
 		return null;
 	}
 
-	public static String executeLinux(final String uuid, final String command) {
+	public static ExecuteResult executeLinux(final String uuid, final String command) {
 		LOG.info("command={}", command);
 
 		try {
@@ -77,8 +78,9 @@ public class SVNService {
 			final int exitCode = process.waitFor();
 			System.out.println("exitCode = " + exitCode);
 
-			return r.toString();
-
+//			return r.toString();
+			final ExecuteResult result = new ExecuteResult(exitCode, r.toString());
+			return result;
 		} catch (final IOException | InterruptedException e) {
 			e.printStackTrace();
 		}

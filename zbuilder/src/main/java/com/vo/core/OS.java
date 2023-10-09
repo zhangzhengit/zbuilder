@@ -1,5 +1,6 @@
 package com.vo.core;
 
+import com.vo.service.ExecuteResult;
 import com.vo.service.SVNService;
 
 /**
@@ -29,10 +30,10 @@ public class OS {
 		if (!isLinux()) {
 			return false;
 		}
-		final String executeLinux = SVNService.executeLinux("TEST", "lsb_release -a");
-		System.out.println("executeLinux = " + executeLinux);
+		final ExecuteResult result = SVNService.executeLinux("TEST", "lsb_release -a");
+		System.out.println("executeLinux = " + result.getOutput());
 
-		final boolean contains = executeLinux.toLowerCase().contains(UBUNTU);
+		final boolean contains = result.getOutput().toLowerCase().contains(UBUNTU);
 
 		return contains;
 	}

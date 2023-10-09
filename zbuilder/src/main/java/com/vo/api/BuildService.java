@@ -27,6 +27,7 @@ import com.vo.repository.JobRepository;
 import com.vo.repository.NodeRepository;
 import com.vo.repository.NodeService;
 import com.vo.service.BuildHistoryService;
+import com.vo.service.ExecuteResult;
 import com.vo.service.JobService;
 import com.vo.service.SVNService;
 import com.votool.common.CR;
@@ -294,8 +295,8 @@ public class BuildService {
 
 		addOutput(uuid, "开始拉取代码：" + checkout);
 
-		final String checkoutResult = SVNService.executeLinux(uuid, checkout);
-		System.out.println("checkoutResult = " + checkoutResult);
+		final ExecuteResult checkoutResult = SVNService.executeLinux(uuid, checkout);
+		System.out.println("checkoutResult = " + checkoutResult.getOutput());
 
 		final String mvn = "mvn -f " + workspaceAbsolutePath.trim() + "/" + jobEntity.getProjectName().trim() + " -B "
 				+ jobEntity.getBuildCommand();
@@ -305,7 +306,7 @@ public class BuildService {
 		addOutput(uuid, "[构建开始] " + LocalDateTime.now());
 		addOutput(uuid, "===============================================================================");
 		final long t1 = System.currentTimeMillis();
-		final String mvnResult = SVNService.executeLinux(uuid, mvn);
+		final ExecuteResult mvnResult = SVNService.executeLinux(uuid, mvn);
 		final long t2 = System.currentTimeMillis();
 		addOutput(uuid, "===============================================================================");
 		addOutput(uuid, "[构建结束] " + LocalDateTime.now() + "\t" + "耗时 " + (t2 - t1) + " 毫秒");
@@ -330,15 +331,15 @@ public class BuildService {
 		System.out.println("cp = " + robocopy);
 
 		addOutput(uuid, robocopy);
-		final String executeWindows = SVNService.executeLinux(uuid, robocopy);
-		addOutput(uuid, executeWindows);
+		final ExecuteResult result = SVNService.executeLinux(uuid, robocopy);
+		addOutput(uuid, result.getOutput());
 		addOutput(uuid, "===============================================================================");
 		addOutput(uuid, "拷贝目标文件到执行目录完成");
 
 		// 结束标识
 		addOutput(uuid, SVNService.BUILD_END);
 
-		return mvnResult;
+		return mvnResult.getOutput();
 	}
 
 
@@ -437,8 +438,8 @@ public class BuildService {
 					+ jobEntity.getTargetDirectory() + File.separator + "jar" + File.separator
 					+ jobEntity.getProjectName() + "\'";
 			System.out.println("mkdirP = " + mkdirP);
-			final String mkdirPOutput = SVNService.executeLinux(buildHistoryEntity.getUuid(), mkdirP);
-			System.out.println("mkdirPOutput" + mkdirPOutput);
+			final ExecuteResult mkdirPOutput = SVNService.executeLinux(buildHistoryEntity.getUuid(), mkdirP);
+			System.out.println("mkdirPOutput" + mkdirPOutput.getOutput());
 			// OK
 
 
@@ -450,8 +451,8 @@ public class BuildService {
 					 ;
 			// OK
 			System.out.println("scp = " + scp);
-			final String scpOutput = SVNService.executeLinux(buildHistoryEntity.getUuid(), scp);
-			System.out.println("scpOutput = " + scpOutput);
+			final ExecuteResult result = SVNService.executeLinux(buildHistoryEntity.getUuid(), scp);
+			System.out.println("scpOutput = " + result.getOutput());
 
 			// 2 ssh执行 java -jar
 			// FIXME 2023年10月2日 下午8:19:35 zhanghen: 改为如下：先cd 然后&& java -jar 才可以正常读取jar同目录的配置文件
@@ -480,8 +481,8 @@ public class BuildService {
 
 			System.out.println("deploy = " + deployCD1);
 
-			final String deployOutput = SVNService.executeLinux(buildHistoryEntity.getUuid(), deployCD1);
-			System.out.println("deployOutput = " + deployOutput);
+			final ExecuteResult deployOutput = SVNService.executeLinux(buildHistoryEntity.getUuid(), deployCD1);
+			System.out.println("deployOutput = " + deployOutput.getOutput());
 
 		}
 

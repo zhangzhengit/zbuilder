@@ -19,6 +19,7 @@ import com.vo.dto.StartJobDTO;
 import com.vo.entity.JobEntity;
 import com.vo.entity.NodeEntity;
 import com.vo.enums.NodeStatusEnum;
+import com.vo.service.ExecuteResult;
 import com.vo.service.JobService;
 import com.vo.service.SVNService;
 import com.votool.common.CR;
@@ -97,9 +98,9 @@ public class NodeService {
 		// 改用pkill -f 杀死全部的进程
 		final String kill = "ssh -v root@"  + nodeEntity.getIp() + " " + "\'pkill -f " + jobEntity.getProjectName() + "\'";
 //		final String kill = "ssh -v root@"  + nodeEntity.getIp() + " " + "\'kill $(pgrep -f " + jobEntity.getProjectName() + ")\'";
-		final String killOutput = SVNService.executeLinux("kill-pid", kill);
-		LOG.info("killOutput={}", killOutput);
-		return killOutput;
+		final ExecuteResult killOutputResult = SVNService.executeLinux("kill-pid", kill);
+		LOG.info("killOutput={}", killOutputResult.getClass());
+		return killOutputResult.getOutput();
 	}
 
 	public CR<String> startJob(final StartJobDTO startJobDTO) {
@@ -134,8 +135,8 @@ public class NodeService {
 				+ " >> " + jobEntity.getLogFilePath() + " &'"
 				;
 
-		final String deployOutput = SVNService.executeLinux("start-job", deploy);
-		return deployOutput;
+		final ExecuteResult deployOutput = SVNService.executeLinux("start-job", deploy);
+		return deployOutput.getOutput();
 	}
 
 	public CR<String> startJobAllNode(final StartJobDTO startJobDTO) {
@@ -194,10 +195,10 @@ public class NodeService {
 
 		final String netstat = "ssh root@" + nodeEntity.getIp() + " \"netstat -tln | grep " + port + "\"";
 		System.out.println("netstat = " + netstat);
-		final String netstatOutput = SVNService.executeLinux("NETSATA" + "@" + nodeId + "@"  + port, netstat);
-		System.out.println("netstatOutput = " + netstatOutput);
+		final ExecuteResult result = SVNService.executeLinux("NETSATA" + "@" + nodeId + "@"  + port, netstat);
+		System.out.println("netstatOutput = " + result.getOutput());
 
-		final String output = StrUtil.isEmpty(netstatOutput) ?  WEI_YUNXING : YUNXINGZHONG;
+		final String output = StrUtil.isEmpty(result.getOutput()) ?  WEI_YUNXING : YUNXINGZHONG;
 
 		return CR.ok("[" + output + "]" + " - " + nodeId + " - " + nodeEntity.getNickName());
 	}
