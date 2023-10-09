@@ -11,7 +11,7 @@
 	<artifactId>zbuilder</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<name>zbuilder</name>
-	<description>钢蛋自动化部署工具</description>
+	<description>zbuilder</description>
 	
 	<properties>
 		<java.version>1.8</java.version>
