@@ -154,16 +154,28 @@
 	<table border = "1">
 		<tr>
 			<td>节点ID</td>
-			<td>节点名称</td><td>IP</td><td>状态</td>
+			<td>节点名称</td>
+			<td>用户名</td>
+			<td>IP</td>
+			<td>状态</td>
+			<td>备注</td>
 			<td>操作</td>
 		</tr>
 		
 		<#list nodeList as n>
 	   		 <tr>
 				<td>${n.id}</td>
-				<td>${n.nickName}</td>
+				<td>
+					<#if n.nickName?has_content>
+						${n.nickName}
+					<#else>
+						暂无
+					</#if>
+				</td>
+				<td>${n.userName}</td>
 				<td>${n.ip}</td>
 				<td>${n.statusString}</td>
+				<td>${n.remark}</td>
 				<td>
 					<#if n.status == 1>
 						<input type="button" onclick="startNode(${n.id},'${n.nickName}')" value="启用节点"/>

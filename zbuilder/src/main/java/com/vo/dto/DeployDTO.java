@@ -1,5 +1,8 @@
 package com.vo.dto;
 
+import com.vo.validator.ZNotEmtpy;
+import com.vo.validator.ZNotNull;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +19,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DeployDTO {
 
+	@ZNotEmtpy
 	private String version;
+
+	@ZNotNull
 	private Integer hId;
 
 }

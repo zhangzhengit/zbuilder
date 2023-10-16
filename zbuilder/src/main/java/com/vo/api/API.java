@@ -1,22 +1,16 @@
 package com.vo.api;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.aspectj.weaver.reflect.ReflectionBasedReferenceTypeDelegate;
-import org.codehaus.groovy.transform.tailrec.ReturnAdderForClosures;
-
-import com.fasterxml.jackson.databind.ext.DOMDeserializer.NodeDeserializer;
 import com.google.common.collect.Lists;
 import com.vo.anno.ZAutowired;
 import com.vo.anno.ZController;
 import com.vo.anno.ZRequestBody;
-import com.vo.core.ZContext;
+import com.vo.core.ZValidated;
 import com.vo.dto.BuildDTO;
 import com.vo.dto.CheckNodePortDTO;
 import com.vo.dto.DeployDTO;
@@ -46,7 +40,6 @@ import com.votool.ze.ZE;
 import com.votool.ze.ZES;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.ListUtil;
 
 /**
@@ -132,7 +125,7 @@ public class API {
 	}
 
 	@ZRequestMapping(mapping = { "/newNode" }, qps = 1, method = MethodEnum.POST)
-	public CR newNode(@ZRequestBody final NewNodeDTO newNodeDTO) {
+	public CR newNode(@ZRequestBody @ZValidated final NewNodeDTO newNodeDTO) {
 		System.out.println(
 				java.time.LocalDateTime.now() + "\t" + Thread.currentThread().getName() + "\t" + "API.newNode()");
 
@@ -140,12 +133,19 @@ public class API {
 		return cr;
 	}
 
+	/**
+	 * 去往构建页面
+	 *
+	 * @param model
+	 * @param id
+	 * @return
+	 *
+	 */
 	@ZRequestMapping(mapping = { "/build" }, qps = 5)
 	@ZHtml
 	public String build(final ZModel model, @ZRequestParam final Integer id) {
 		System.out.println(
 				java.time.LocalDateTime.now() + "\t" + Thread.currentThread().getName() + "\t" + "API.build()");
-
 
 		final JobEntity jobEntity = this.jobRepository.findById(id);
 		model.set("jobEntity", jobEntity);
@@ -159,8 +159,16 @@ public class API {
 		return "html/build.html";
 	}
 
+	/**
+	 * POST 开始构建一个工程
+	 *
+	 * @param buildDTO
+	 * @return
+	 *
+	 */
 	@ZRequestMapping(mapping = { "/buildstart" }, qps = 5, method = MethodEnum.POST)
-	public CR buildstart(@ZRequestBody final BuildDTO buildDTO) {
+//	public CR buildstart(@ZRequestBody  final BuildDTO buildDTO) {
+	public CR buildstart(@ZRequestBody @ZValidated final BuildDTO buildDTO) {
 		System.out.println(
 				java.time.LocalDateTime.now() + "\t" + Thread.currentThread().getName() + "\t" + "API.buildstart()");
 
@@ -208,7 +216,7 @@ public class API {
 	}
 
 	@ZRequestMapping(mapping = { "/deploy" }, qps = 1, method = MethodEnum.POST)
-	public CR deploy(@ZRequestBody final DeployDTO deployDTO) {
+	public CR deploy(@ZRequestBody @ZValidated final DeployDTO deployDTO) {
 		System.out.println(
 				java.time.LocalDateTime.now() + "\t" + Thread.currentThread().getName() + "\t" + "API.deploy()");
 
@@ -248,7 +256,7 @@ public class API {
 	}
 
 	@ZRequestMapping(mapping = { "/checkNodePort" }, qps = 1,method = MethodEnum.POST)
-	public CR checkNodePort(@ZRequestBody final CheckNodePortDTO checkNodePortDTO) {
+	public CR checkNodePort(@ZRequestBody @ZValidated final CheckNodePortDTO checkNodePortDTO) {
 		System.out.println(
 				java.time.LocalDateTime.now() + "\t" + Thread.currentThread().getName() + "\t" + "API.checkNodePort()");
 		// FIXME 2023年9月30日 上午12:00:53 zhanghen: 改为在index.html列表里直接展示 每个节点的job执行状态（有点耗时）
@@ -301,7 +309,7 @@ public class API {
 	}
 
 	@ZRequestMapping(mapping = { "/killJob" }, qps = 1, method = MethodEnum.POST)
-	public CR killJob(@ZRequestBody final KillJobDTO killJobDTO) {
+	public CR killJob(@ZRequestBody @ZValidated final KillJobDTO killJobDTO) {
 		System.out.println(
 				java.time.LocalDateTime.now() + "\t" + Thread.currentThread().getName() + "\t" + "API.killJob()");
 
@@ -310,7 +318,7 @@ public class API {
 	}
 
 	@ZRequestMapping(mapping = { "/startJob" }, qps = 1, method = MethodEnum.POST)
-	public CR startJob(@ZRequestBody final StartJobDTO startJobDTO) {
+	public CR startJob(@ZRequestBody @ZValidated final StartJobDTO startJobDTO) {
 		System.out.println(
 				java.time.LocalDateTime.now() + "\t" + Thread.currentThread().getName() + "\t" + "API.startJob()");
 
@@ -319,7 +327,7 @@ public class API {
 	}
 
 	@ZRequestMapping(mapping = { "/startJobAllNode" }, qps = 1, method = MethodEnum.POST)
-	public CR startJobAllNode(@ZRequestBody final StartJobDTO startJobDTO) {
+	public CR startJobAllNode(@ZRequestBody @ZValidated final StartJobDTO startJobDTO) {
 		System.out.println(java.time.LocalDateTime.now() + "\t" + Thread.currentThread().getName() + "\t"
 				+ "API.startJobAllNode()");
 
@@ -328,7 +336,7 @@ public class API {
 	}
 
 	@ZRequestMapping(mapping = { "/killJobAllNode" }, qps = 1, method = MethodEnum.POST)
-	public CR killJobAllNode(@ZRequestBody final KillJobDTO killJobDTO) {
+	public CR killJobAllNode(@ZRequestBody @ZValidated final KillJobDTO killJobDTO) {
 		System.out.println(java.time.LocalDateTime.now() + "\t" + Thread.currentThread().getName() + "\t"
 				+ "API.killJobAllNode()");
 
@@ -343,7 +351,7 @@ public class API {
 	 * @return
 	 */
 	@ZRequestMapping(mapping = { "/stopNode" }, qps = 1, method = MethodEnum.POST)
-	public CR stopNode(@ZRequestBody final StopNodeDTO stopNodeDTO) {
+	public CR stopNode(@ZRequestBody @ZValidated final StopNodeDTO stopNodeDTO) {
 		System.out.println(
 				java.time.LocalDateTime.now() + "\t" + Thread.currentThread().getName() + "\t" + "API.stopNode()");
 

@@ -1,5 +1,7 @@
 package com.vo.dto;
 
+import com.vo.validator.ZMin;
+import com.vo.validator.ZNotEmtpy;
 import com.vo.validator.ZNotNull;
 
 import lombok.AllArgsConstructor;
@@ -19,10 +21,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BuildDTO {
 
+	@ZNotNull
 	private Integer jobId;
 
 	/**
-	 * 	构建备注信息，如：测试
+	 * 构建备注信息，如：测试
 	 */
 	private String remark;
 }

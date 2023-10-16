@@ -12,13 +12,19 @@
 	<version>1.0-SNAPSHOT</version>
 	<name>zbuilder</name>
 	<description>zbuilder</description>
-	
+
 	<properties>
 		<java.version>1.8</java.version>
 		<encoding>UTF-8</encoding>
 	</properties>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>org.java-websocket</groupId>
+			<artifactId>Java-WebSocket</artifactId>
+			<version>1.5.3</version>
+		</dependency>
 
 		<dependency>
 			<groupId>com.vo</groupId>

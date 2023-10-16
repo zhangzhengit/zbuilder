@@ -5,12 +5,15 @@
 <script type="text/javascript">
 
 	function create(){
-		 
 		
-		var name = $("#name").val();
+		var nickName = $("#nickName").val();
+		var userName = $("#userName").val();
+		var remark = $("#remark").val();
 		var ip = $("#ip").val();
 		var urlData={
-			 "name":name,
+			 "nickName":nickName,
+			 "userName":userName,
+			 "remark":remark,
 			 "ip":ip
 		};
 		
@@ -24,15 +27,14 @@
 	        success: function(result){
 	       	 if(result.code == 0){
 	       		 	alert('OK');
-// 	       		 window.location.href="/tobuildResult?uuid=" + result.data;
-// 	       		window.open("/tobuildResult?uuid=" + result.data, "_blank");
 	       	 } else {
-				alert("操作出错:" + result.message);
+				alert("操作出错:\n" + result.message);
 	       	 }
 	        },
-	        error: function(result){
-				alert("操作出错:" + result.message);
+	        error: function(xhr, status, error) {
+	            alert( error + '\n' + xhr.responseText); 
 	        }
+	      
 	    });
 	}
 	
@@ -50,12 +52,20 @@
 	<h1>新增节点</h1>
 	<table border="1">
 		<tr>
-			<td>名称</td>
-			<td><input type="text" id="name" placeholder="输入节点名称" /></td>
+			<td>节点名称</td>
+			<td><input type="text" id="nickName" placeholder="输入节点名称" /></td>
+		</tr>
+		<tr>
+			<td>节点用户名</td>
+			<td><input type="text" id="userName" placeholder="输入节点用户名" /></td>
 		</tr>
 		<tr>
 			<td>IP</td>
 			<td><input type="text" id="ip" placeholder="输入节点IP" /></td>
+		</tr>
+		<tr>
+			<td>节点备注信息</td>
+			<td><input type="text" id="remark" placeholder="输入节点备注信息" /></td>
 		</tr>
 		<tr>
 			<td></td>

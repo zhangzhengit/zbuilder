@@ -1,5 +1,7 @@
 package com.vo.dto;
 
+import com.vo.validator.ZNotNull;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CheckNodePortDTO {
 
+	@ZNotNull
 	private Integer jobId;
 
 }

@@ -27,6 +27,7 @@ public class NodeEntity {
 	private String userName;
 	private String password;
 	private String nickName;
+	private String remark;
 
 	/**
 	 * @see NodeStatusEnum

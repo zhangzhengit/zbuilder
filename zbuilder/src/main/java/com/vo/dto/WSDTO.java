@@ -1,7 +1,5 @@
 package com.vo.dto;
 
-import com.vo.validator.ZNotNull;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,17 +8,22 @@ import lombok.NoArgsConstructor;
  *
  *
  * @author zhangzhen
- * @date 2023年10月2日
+ * @date 2023年10月11日
  *
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StartJobDTO {
+public class WSDTO {
 
-	@ZNotNull
-	private Integer nodeId;
+	/**
+	 * 区分客户端的唯一ID
+	 */
+	private String uuid;
 
-	@ZNotNull
-	private Integer jobId;
+	/**
+	 * 通信消息
+	 */
+	private String message;
+
 }

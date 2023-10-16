@@ -195,7 +195,10 @@ public class NodeService {
 
 		final String netstat = "ssh root@" + nodeEntity.getIp() + " \"netstat -tln | grep " + port + "\"";
 		System.out.println("netstat = " + netstat);
-		final ExecuteResult result = SVNService.executeLinux("NETSATA" + "@" + nodeId + "@"  + port, netstat);
+		// FIXME 2023年10月11日 下午10:18:18 zhanghen: 下面一行还原
+		final ExecuteResult result = new ExecuteResult()
+				;
+//				SVNService.executeLinux("NETSATA" + "@" + nodeId + "@"  + port, netstat);
 		System.out.println("netstatOutput = " + result.getOutput());
 
 		final String output = StrUtil.isEmpty(result.getOutput()) ?  WEI_YUNXING : YUNXINGZHONG;
@@ -206,6 +209,7 @@ public class NodeService {
 	// FIXME 2023年9月29日 下午10:53:03 zhanghen: TODO 一个主机有多个ip时，怎么判断新增的节点ip是否同一台呢？
 	public synchronized CR<Object> createOne(final NewNodeDTO newNodeDTO) {
 		LOG.info("开始新增节点,newNodeDTO={}", newNodeDTO);
+
 		final Matcher matcher = IP_PATTERN.matcher(newNodeDTO.getIp());
 		if (!matcher.matches()) {
 			return CR.error("ip格式错误，请重新输入ip");
@@ -216,14 +220,16 @@ public class NodeService {
 			return CR.error("ip已存在，请重新输入ip");
 		}
 
-		final List<NodeEntity> findByNickName = this.nodeRepository.findByNickName(newNodeDTO.getName());
+		final List<NodeEntity> findByNickName = this.nodeRepository.findByNickName(newNodeDTO.getNickName());
 		if (CollUtil.isNotEmpty(findByNickName)) {
-			return CR.error("名称已存在，请重新输入名称");
+			return CR.error("nickName已存在，请重新输入名称");
 		}
 
 		final NodeEntity entity = new NodeEntity();
 		entity.setIp(newNodeDTO.getIp());
-		entity.setNickName(newNodeDTO.getName());
+		entity.setNickName(newNodeDTO.getNickName());
+		entity.setUserName(newNodeDTO.getUserName());
+		entity.setRemark(newNodeDTO.getRemark());
 		entity.setStatus(NodeStatusEnum.QI_YONG.getStatus());
 
 		final NodeEntity save = this.nodeRepository.save(entity);

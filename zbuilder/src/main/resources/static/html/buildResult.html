@@ -43,6 +43,30 @@
 		alert("部署:" + uuid);
 		
 	}
+	
+	
+  function createWebSocket() {
+      // 创建WebSocket对象
+      var socket = new WebSocket("ws://localhost:9999");
+	  
+      // 打开WebSocket连接
+      socket.onopen = function(event) {
+        // 发送消息
+        socket.send("Hello, World!");
+      };
+
+      // 接收到消息
+      socket.onmessage = function(event) {
+        // 处理消息
+        console.log("Received message: " + event.data);
+      };
+
+      // 关闭WebSocket连接
+      socket.onclose = function(event) {
+        console.log("WebSocket is closed.");
+      };
+    }
+	
 		
 </script> 
 	
@@ -52,7 +76,7 @@
 </head>
 
 
-<body>
+<body onload="createWebSocket()">
 
 	<hr/>
 	<h1>构建结果输出 <label id="uuid">${uuid}</label></h1>

@@ -38,4 +38,10 @@ public class Conf {
 	@ZNotNull
 	private String install;
 
+	/**
+	 * 	启动的websocket端口
+	 */
+	@ZNotNull
+	private Integer webSocketPort;
+
 }
